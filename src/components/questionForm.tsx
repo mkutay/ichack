@@ -10,9 +10,11 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "./ui/textarea";
+import { insertQuestionAnswerWithQuestionId } from "@/lib/db";
 
 const formSchema = z.object({
   text: z.string().min(1, {
@@ -20,7 +22,7 @@ const formSchema = z.object({
   }),
 });
 
-export function SubmitForm() {
+export function QuestionForm({ question, questionId }: { question: string | null, questionId: string }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -28,21 +30,21 @@ export function SubmitForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await insertQuestionAnswerWithQuestionId(questionId, values.text);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1.5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1.5 w-full">
         <FormField
           control={form.control}
           name="text"
           render={({ field }) => (
             <FormItem>
-              {/* <FormLabel></FormLabel> */}
+              <FormLabel>{question}</FormLabel>
               <FormControl>
-                <Textarea placeholder="What decision do you want to make?" {...field} />
+                <Textarea placeholder="What do you want to do with that?" {...field} />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.
@@ -51,9 +53,7 @@ export function SubmitForm() {
             </FormItem>
           )}
         />
-        <div className="flex flex-row justify-end">
-          <Button type="submit">Submit</Button>
-        </div>
+        <Button type="submit">Submit</Button>
       </form>
     </Form>
   )

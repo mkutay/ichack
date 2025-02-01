@@ -13,23 +13,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "./ui/textarea";
+import { insertFirstScenario } from "@/lib/db";
 
 const formSchema = z.object({
-  text: z.string().min(1, {
+  scenarioText: z.string().min(1, {
     message: "Send at least one character.",
   }),
 });
 
-export function SubmitForm() {
+export function FirstSubmitForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      text: "",
+      scenarioText: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    await insertFirstScenario(values.scenarioText);
   };
 
   return (
@@ -37,7 +38,7 @@ export function SubmitForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1.5">
         <FormField
           control={form.control}
-          name="text"
+          name="scenarioText"
           render={({ field }) => (
             <FormItem>
               {/* <FormLabel></FormLabel> */}
