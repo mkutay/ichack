@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { Textarea } from "./ui/textarea";
 import { insertFirstScenario } from "@/lib/db";
+import { redirect } from "next/navigation";
 
 const formSchema = z.object({
   scenarioText: z.string().min(1, {
@@ -29,8 +30,10 @@ export function FirstSubmitForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    await insertFirstScenario({description: values.scenarioText, title: ''});
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const id = crypto.randomUUID();
+    insertFirstScenario({description: values.scenarioText, title: ''}, id);
+    redirect(`/${id}`);
   };
 
   return (
@@ -43,7 +46,7 @@ export function FirstSubmitForm() {
             <FormItem>
               {/* <FormLabel></FormLabel> */}
               <FormControl>
-                <Textarea placeholder="What decision do you want to make?" {...field} />
+                <Textarea placeholder="What decision do you need help with?" {...field} />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.

@@ -25,8 +25,7 @@ CREATE TABLE questions (
 );
 */
 
-export async function insertFirstScenario(response: AIResponse) {
-  const id = crypto.randomUUID();
+export async function insertFirstScenario(response: AIResponse, id: string) {
   const questionTexts: AIResponse[] = await getQuestionsClaude([{title: response.title, description: response.description, questions: null, answers: null} as Scenario]);
 
   const questionIds = await insertQuestions(id, questionTexts);
@@ -40,8 +39,6 @@ export async function insertFirstScenario(response: AIResponse) {
   } catch (e) {
     console.error("trying to insert first scenario with text " + response.title + ". error: " + e);
   }
-
-  redirect(`/${id}`);
 }
 
 export async function getQuestionsAndInsert(scenarioId: string) {
