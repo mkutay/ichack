@@ -38,7 +38,8 @@ const formSchema = z.object({
 export function InfoComp({ questions, id }: {
   questions: {
     id: string;
-    question_text: string | null;
+    title: string | null;
+    description: string | null;
     user_answer: string | null;
   }[],
   id: string,
@@ -69,8 +70,11 @@ export function InfoComp({ questions, id }: {
                 <Card key={question.id}>
                   <CardHeader className="p-3 px-4">
                     <CardTitle>
-                      {question.question_text}
+                      {question.title}
                     </CardTitle>
+                    <CardDescription>
+                      {question.description}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="p-3 px-4 pt-0">
                     <FormItem>

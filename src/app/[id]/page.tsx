@@ -16,6 +16,7 @@ export default async function Page({
 }) {
   const { id } = await params;
   const scenario = await getScenario(id);
+  console.log(scenario);
 
   if (scenario.length === 0) {
     return <div>Scenario not found</div>;
@@ -23,13 +24,14 @@ export default async function Page({
 
   console.log(scenario[0]);
 
-  if (scenario[0].text === null) {
+  if (scenario[0].title === null || scenario[0].description === null) {
     return <ScenarioFallback/>;
   }
 
   let childScenarios: {
     id: string;
-    text: string | null;
+    title: string | null;
+    description: string | null;
     question_ids: string[] | null;
     scenario_ids: string[] | null;
     parent_scenario_id: string | null;
@@ -44,13 +46,13 @@ export default async function Page({
   return (
     <div className="w-full my-6 space-y-8 px-4">
       <div className="max-w-xl mx-auto">
-        <NodeDiv text={scenario[0].text}/>
+        <NodeDiv text={scenario[0].title + '\n' + scenario[0].description}/>
       </div>
       <div className="flex flex-row w-full gap-4">
         {childScenarios.map((childScenario) => (
-          <Button key={childScenario.id} asChild>
+          <Button key={childScenario.id} asChild className="h-fit w-full text-wrap">
             <Link href={`/${childScenario.id}`}>
-              <Label>{childScenario.text}</Label>
+              <Label>{childScenario.title + '\n' + childScenario.description}</Label>
             </Link>
           </Button>
         ))}

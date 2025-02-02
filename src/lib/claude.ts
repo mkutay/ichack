@@ -8,10 +8,19 @@ const anthropic = new Anthropic({
 });
 
 export type Scenario = {
-  name: string,
-  questions: string[] | null,
-  answer: string[] | null,
+  title: string,
+  description: string,
+  questions: {
+    title: string,
+    description: string,
+  }[] | null,
+  answers: string[] | null,
 }; // same length for q and a
+
+export type AIResponse = {
+  title: string,
+  description: string,
+};
 
 const SYSTEM_PROMPT_QUESTIONS = `You are an intelligent decision-making assistant that helps users explore potential futures by refining their input through insightful clarifying questions. Your goal is to ask the most relevant clarifying and concise short questions based on:
 
@@ -25,9 +34,18 @@ The new questions must logically build on past responses and avoid repetition.
 Only output the questions in JSON format as follows:
 {
   "questions": [
-    "Question 1",
-    "Question 2",
-    "Question 3"
+    {
+      "title": "Question 1 in a few short words",
+      "description": "Detailed description of question 1."
+    },
+    {
+      "title": "Question 2 in a few short words",
+      "description": "Detailed description of question 2."
+    },
+    {
+      "title": "Scenario 3 in a few short words",
+      "description": "Detailed description of question 3."
+    }
   ]
 }
 
@@ -39,23 +57,23 @@ Do not include explanations or commentary—only output valid JSON.
 
 Input Format:
 You will receive structured input in the following format:
-{
-  "current_scenario": "User's current decision point",
-  "past_scenarios": [
-    "Previous scenario 1",
-    "Previous scenario 2"
-  ],
-  "qa_history": [
-    {
-      "question": "Previously asked question",
-      "answer": "User's answer to that question"
-    },
-    {
-      "question": "Another previously asked question",
-      "answer": "User's answer to that question"
-    }
-  ]
-}`;
+[
+  {
+    "title": "User's scenario title",
+    "description": "Detailed description of the scenario the user is in.",
+    "questions": [
+      {
+        "title": "Some words on relevant question 1.",
+        "description": "Detailed description of question 1."
+      },
+      {
+        "title": "Some words on relevant question 2.",
+        "description": "Detailed description of question 2."
+      }
+    ],
+    "answer": ["User's answer to relevant question 1.", "User's answer to relevant question 2."]
+  }
+]`;
 
 const SYSTEM_PROMPT_SCENARIOS = `You are an intelligent decision-making assistant that predicts the most likely future scenarios based on user choices. Your goal is to generate structured, insightful future, concise short scenarios based on:
 
@@ -93,101 +111,45 @@ Only output valid JSON without explanations or extra comments.
 
 Input Format:
 You will receive structured input in the following format:
-{
-  "current_scenario": "User's current decision point",
-  "qa_history": [
-    {
-      "question": "Relevant question",
-      "answer": "User's answer to that question"
-    },
-    {
-      "question": "Another relevant question",
-      "answer": "User's answer to that question"
-    }
-  ],
-  "past_scenarios": [
-    "Previously explored scenario 1",
-    "Previously explored scenario 2"
-  ],
-  "past_qa_history": [
-    {
-      "question": "Previously asked question",
-      "answer": "User's past response"
-    },
-    {
-      "question": "Another previously asked question",
-      "answer": "User's past response"
-    }
-  ]
-}`;
-
-export async function getScenarios(history: Scenario[]): Promise<string[]> {
-  const prompt = {
-    current_scenario: history[0].name,
-    qa_history: () => {
-      let temp: {
-        question: string;
-        answer: string;
-      }[] = [];
-
-      if (history[0].questions !== null)
-        for (const q of history[0].questions) {
-          temp.push({ question: q, answer: history[0].answer![history[0].questions.indexOf(q)] });
-        }
-
-      return temp;
-    },
-    past_scenarios: history.slice(1).map((item) => item.name),
-    past_qa_history: () => {
-      let temp: {
-        question: string;
-        answer: string;
-      }[] = [];
-
-      for (const h of history.slice(1)) {
-        if (h.questions !== null)
-          for (const q of h.questions) {
-            temp.push({ question: q, answer: h.answer![h.questions.indexOf(q)] });
-          }
+[
+  {
+    "title": "User's scenario title",
+    "description": "Detailed description of the scenario the user is in.",
+    "questions": [
+      {
+        "title": "Some words on relevant question 1.",
+        "description": "Detailed description of question 1."
+      },
+      {
+        "title": "Some words on relevant question 2.",
+        "description": "Detailed description of question 2."
       }
+    ],
+    "answer": ["User's answer to relevant question 1.", "User's answer to relevant question 2."]
+  }
+]`;
 
-      return temp;
-    },
-  };
+export async function getScenariosClaude(history: Scenario[]): Promise<AIResponse[]> {
   const msg = await anthropic.messages.create({
     model: "claude-3-5-sonnet-20241022",
     max_tokens: 1024,
     system: SYSTEM_PROMPT_SCENARIOS,
-    messages: [{ role: "user", content: JSON.stringify(prompt) }],
+    messages: [{ role: "user", content: JSON.stringify(history) }],
   });
-  return msg.content.map((item: any) => JSON.parse(item.text).scenarios).map((item: any) => item.title + "\n" + item.description);
+  console.log(msg.content);
+  return msg.content.map((item: any) => JSON.parse(item.text))[0].scenarios;
 }
 
 // the first call would have null questions and answers
-export async function getQuestions(history: Scenario[]): Promise<string[]> {
-  let temp: {
-    question: string;
-    answer: string;
-  }[] = [];
-
-  for (const h of history) {
-    if (h.questions !== null)
-      for (const q of h.questions) {
-        temp.push({ question: q, answer: h.answer![h.questions.indexOf(q)] });
-      }
-  }
-
-  const prompt = {
-    "current_scenario": history[0].name,
-    "past_scenarios": history.slice(1).map((item) => item.name),
-    "qa_history": temp,
-  }
+export async function getQuestionsClaude(history: Scenario[]): Promise<AIResponse[]> {
+  console.log(history);
   const msg = await anthropic.messages.create({
     model: "claude-3-5-sonnet-20241022",
     max_tokens: 1024,
     system: SYSTEM_PROMPT_QUESTIONS,
-    messages: [{ role: "user", content: JSON.stringify(prompt) }],
+    messages: [{ role: "user", content: JSON.stringify(history) }],
   });
-
-  return msg.content.map((item: any) => JSON.parse(item.text).questions)[0];
+  console.log(msg.content);
+  console.log(msg.content.map((item: any) => JSON.parse(item.text)));
+  return msg.content.map((item: any) => JSON.parse(item.text))[0].questions;
 }

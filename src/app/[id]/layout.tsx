@@ -15,8 +15,12 @@ export default async function Layout({
   const { id } = await params;
   const scenario = await getScenario(id);
 
-  if (scenario.length === 0 || scenario[0].question_ids === null) {
-    return <div>Scenario not found</div>;
+  if (scenario.length === 0) {
+    return <div>Scenario not found ba</div>;
+  }
+
+  if (scenario[0].question_ids === null) {
+    return <div>Scenario has no questions</div>;
   }
 
   const questions = await Promise.all(scenario[0].question_ids.map((questionId) => getQuestionFromId(questionId).then((q) => q[0])));

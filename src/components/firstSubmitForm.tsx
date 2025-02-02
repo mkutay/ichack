@@ -30,7 +30,7 @@ export function FirstSubmitForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    await insertFirstScenario(values.scenarioText);
+    await insertFirstScenario({description: values.scenarioText, title: ''});
   };
 
   return (
