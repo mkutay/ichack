@@ -1,5 +1,8 @@
 import { ScenarioFallback } from "@/components/scenarioFallback";
+import { Button } from "@/components/ui/button";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { getScenario } from "@/lib/db";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 export default async function Page({
@@ -39,16 +42,28 @@ export default async function Page({
   }
 
   return (
-    <div className="w-full my-6 space-y-8 px-4">
-      <div className="w-full flex flex-row">
-        <div className="mx-auto px-4 py-2 h-full w-1/3 text-text bg-bw border-2 border-border shadow-shadow flex items-center justify-center rounded-base ring-offset-white gap-2">
+    <div className="w-full space-y-8 my-6 pr-6">
+      <div className="w-full flex flex-row items-center">
+        <div id={id} className="mx-auto px-4 py-2 h-full w-1/3 text-text bg-bw border-2 border-border shadow-shadow flex flex-col items-center justify-center rounded-base ring-offset-white gap-2">
           {scenario[0].title !== '' && <div className="text-xl font-bold">{scenario[0].title}</div>}
           <div className="text-lg font-base">{scenario[0].description}</div>
         </div>
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button variant="noShadow" size="icon" disabled={scenario[0].parent_scenario_id === null}>
+              <Link href={`/${scenario[0].parent_scenario_id}`}>
+                <ArrowUpIcon/>
+              </Link>
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent>
+            Go back to the previous scenario.
+          </HoverCardContent>
+        </HoverCard>
       </div>
       <div className="flex flex-row w-full gap-4">
         {childScenarios.map((childScenario) => (
-          <Link href={`/${childScenario.id}`} key={childScenario.id} className="px-4 py-2 h-full w-full text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-center rounded-base ring-offset-white transition-all gap-2">
+          <Link id={childScenario.id} href={`/${childScenario.id}`} key={childScenario.id} className="px-4 py-2 h-full w-full text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-center rounded-base ring-offset-white transition-all gap-2">
             {childScenario.title !== '' && <div className="text-xl font-bold">{childScenario.title}</div>}
             <div className="text-lg font-base">{childScenario.description}</div>
           </Link>
@@ -57,3 +72,5 @@ export default async function Page({
     </div>
   )
 }
+
+// DND: DILEMMAS AND DECISIONS (w/ Pathfinder)

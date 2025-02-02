@@ -35,7 +35,7 @@ export function FirstSubmitForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-1.5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
         <FormField
           control={form.control}
           name="scenarioText"

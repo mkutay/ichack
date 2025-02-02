@@ -27,9 +27,9 @@ export default async function Layout({
   const questions = await Promise.all(scenario[0].question_ids.map((questionId) => getQuestionFromId(questionId).then((q) => q[0])));
 
   return (
-    <div className="flex flex-row gap-8 mx-0 mr-8 h-full">
+    <div className="flex flex-row mx-6 h-full">
       {children}
-      <div className="min-h-screen w-1/3 pt-6 pb-4 px-4 flex flex-col justify-between bg-background border-l-2 border-border">
+      <div className="min-h-screen w-1/3 py-6 pl-6 flex flex-col gap-6 justify-between bg-background border-l-2 border-border">
         <div className="space-y-4 w-full">
           <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
             Info pages, question and answers
