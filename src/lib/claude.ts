@@ -29,7 +29,8 @@ The past scenarios explored so far.
 The list of previous questions and answers to maintain logical continuity and avoid redundancy.
 
 Instructions:
-When given a current scenario, a list of past scenarios, and a history of questions and answers, generate 2–3 new clarifying questions to refine the user’s decision-making process.
+When given a current scenario, a list of past scenarios, and a history of questions and answers, generate 2, 3 or 4 new clarifying questions to refine the user’s decision-making process.
+Choose the number of questions depending on how much depth is required from the user.
 The new questions must logically build on past responses and avoid repetition.
 Only output the questions in JSON format as follows:
 {
@@ -85,7 +86,7 @@ Past explored scenarios to maintain continuity and coherence.
 Past questions and answers to ensure scenarios evolve meaningfully without redundancy.
 
 Instructions:
-Given a current scenario, a history of questions and answers, and previously explored scenarios, generate the three most likely future scenarios that branch from the user's decision.
+Given a current scenario, a history of questions and answers, and previously explored scenarios, generate the 2, 3 or 4 most likely future scenarios that branch from the user's decision.
 Ensure logical progression by considering past context and avoiding contradictions.
 Only output the scenarios in JSON format as follows:
 {
