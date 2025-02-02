@@ -44,13 +44,8 @@ export async function insertFirstScenario(response: AIResponse, id: string) {
 export async function getQuestionsAndInsert(scenarioId: string) {
   const questionTexts: AIResponse[] = await getQuestionsClaude(await getRecursiveHistory(scenarioId));
   const questionIds = await insertQuestions(scenarioId, questionTexts);
-  await sql`
-    UPDATE scenarios
-    SET question_ids=${questionIds}
-    WHERE id=${scenarioId}
-  `;
   // redirect(`/${scenarioId}`);
-  revalidatePath('/[id]');
+  // revalidatePath('/[id]');
 }
 
 export async function getScenario(id: string): Promise<{

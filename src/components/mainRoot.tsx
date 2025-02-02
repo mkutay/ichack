@@ -18,10 +18,10 @@ export async function MainRoot({ id }: { id: string }) {
   }
 
   return (
-    <div className="w-full flex flex-row items-center">
-      <div className="-right-5 relative mx-auto px-4 py-2 h-full w-1/3 text-text bg-bw border-2 border-border flex flex-col items-center justify-center rounded-base ring-offset-white gap-2">
-        {scenario[0].title !== '' && <div className="text-xl font-bold">{scenario[0].title}</div>}
-        <div className="text-lg font-base">{scenario[0].description}</div>
+    <div className="w-full flex flex-row items-start">
+      <div className="-right-10 relative mx-auto px-4 py-3 min-h-40 w-1/3 text-text bg-bw border-2 border-border flex flex-col items-center justify-start rounded-base ring-offset-white gap-2">
+        {scenario[0].title !== '' && <div className="text-xl font-bold tracking-tight leading-none text-left w-full">{scenario[0].title}</div>}
+        <div className={"text-lg font-base text-left w-full leading-6 tracking-normal" + (scenario[0].title !== '' ? "font-bold" : "")}>{scenario[0].description}</div>
       </div>
       <Button className={"relative right-0" + scenario[0].parent_scenario_id === null ? "opacity-20" : ""} asChild variant={scenario[0].parent_scenario_id === null ? "noShadow" : "default"} size="icon" disabled={scenario[0].parent_scenario_id === null}>
         {scenario[0].parent_scenario_id !== null ? <Link href={`/${scenario[0].parent_scenario_id}`}>
@@ -34,22 +34,15 @@ export async function MainRoot({ id }: { id: string }) {
 
 export function MainRootFallback() {
   return (
-    <div className="w-full flex flex-row items-center">
-      <div className="mx-auto px-4 py-2 h-full w-1/3 text-text bg-bw border-2 border-border shadow-shadow flex flex-col items-center justify-center rounded-base ring-offset-white gap-1.5">
+    <div className="w-full flex flex-row items-start">
+      <div className="-right-10 relative mx-auto px-4 py-3 h-full w-1/3 min-h-40 text-text bg-bw border-2 border-border flex flex-col items-start justify-start rounded-base ring-offset-white gap-2">
         <Skeleton className="h-[20px] w-full"/>
         <Skeleton className="h-[18px] w-full"/>
         <Skeleton className="h-[18px] w-2/5"/>
       </div>
-      <HoverCard>
-        <HoverCardTrigger asChild>
-          <Button variant="noShadow" size="icon" disabled={true}>
-            <ArrowUpIcon/>
-          </Button>
-        </HoverCardTrigger>
-        <HoverCardContent>
-          Go back to the previous scenario.
-        </HoverCardContent>
-      </HoverCard>
+      <Button variant="noShadow" size="icon" className="relative right-0">
+        <ArrowUpIcon/>
+      </Button>
     </div>
   )
 }

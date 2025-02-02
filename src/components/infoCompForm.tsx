@@ -71,7 +71,7 @@ export function InfoCompForm({ questions, id }: {
           render={({ field }) => (
             <div className="flex flex-col gap-3">
               {questions.map((question, index) => (
-                <Card key={question.id} className="h-64 justify-between flex flex-col pb-2">
+                <Card key={question.id} className="min-h-64 h-fit justify-between flex flex-col pb-2">
                   <CardHeader className="p-3 px-4">
                     <CardTitle>
                       {question.title}
