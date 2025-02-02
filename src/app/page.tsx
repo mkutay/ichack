@@ -17,7 +17,7 @@ export default function Page() {
       </h1>
       <div className="max-w-xl mx-auto">
         <FirstSubmitForm/>
-        <div className="mt-6">
+        <div className="scroll-m-20 text-2xl font-semibold tracking-tight mt-4">
           First time? Here are some things you could ask me.
         </div>
         {examples.map(example => (

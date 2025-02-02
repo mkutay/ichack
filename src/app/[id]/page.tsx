@@ -36,20 +36,10 @@ export default function Page(props: {
         </div>
       </div>
       <div className="overflow-auto max-h-screen w-1/3 py-6 px-6 flex flex-col gap-6 justify-between bg-background border-l-2 border-border">
-        <div className="space-y-4 w-full">
-          <h2 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-            Info pages, question and answers
-          </h2>
-          <Suspense fallback={<InfoCompFallback/>}>
-            <InfoComp id={id}/>
-          </Suspense>
-          {/* <InfoCompFallback/> */}
-        </div>
-        <div className="flex flex-row justify-end">
-          <div className="text-lg font-semibold">
-            DnD: Dilemmas And Decisions
-          </div>
-        </div>
+        <Suspense fallback={<InfoCompFallback/>}>
+          <InfoComp id={id}/>
+        </Suspense>
+        {/* <InfoCompFallback/> */}
       </div>
     </div>
   )
