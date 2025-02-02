@@ -24,7 +24,7 @@ export function TheWholeThing({ scenario, childScenarios }: {
   }[],
 }) {
   return (
-    <div className="w-full space-y-8 my-6 pr-6">
+    <div className="w-full space-y-8 my-6 pr-6 ml-6">
       <div className="w-full flex flex-row items-center">
         <div className="-right-5 relative mx-auto px-4 py-2 h-full w-1/3 text-text bg-bw border-2 border-border shadow-shadow flex flex-col items-center justify-center rounded-base ring-offset-white gap-2">
           {scenario[0].title !== '' && <div className="text-xl font-bold">{scenario[0].title}</div>}

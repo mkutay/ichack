@@ -40,7 +40,7 @@ export async function AsyncPage({ id }: { id: string }) {
 
 export function AsyncPageFallback() {
   return (
-    <div className="w-full space-y-8 my-6 pr-6">
+    <div className="w-full space-y-8 my-6 pr-6 ml-6">
       <div className="w-full flex flex-row items-center">
         <div  className="mx-auto px-4 py-2 h-full w-1/3 text-text bg-bw border-2 border-border shadow-shadow flex flex-col items-center justify-center rounded-base ring-offset-white gap-1.5">
           <Skeleton className="h-[20px] w-full"/>
