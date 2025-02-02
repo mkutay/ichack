@@ -39,7 +39,7 @@ export async function UnderNodes({ id }: { id: string }) {
   return (
     <div className="flex flex-row w-full gap-4 pl-6 mt-6">
       {childScenarios.map((childScenario) => (
-        <Link href={`/${childScenario.id}`} key={childScenario.id} className="px-4 py-3 min-h-72 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
+        <Link href={`/${childScenario.id}${childScenario.scenario_ids !== null ? '?isNotFirst=true' : ''}`} key={childScenario.id} className="px-4 py-3 min-h-72 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
           {childScenario.title !== '' && <div className="text-xl font-bold leading-none tracking-tight text-left w-full">{childScenario.title}</div>}
           <div className="text-lg font-base text-left w-full leading-6 tracking-normal">{childScenario.description}</div>
         </Link>
@@ -50,7 +50,7 @@ export async function UnderNodes({ id }: { id: string }) {
 
 export function UnderNodesFallback() {
   return (
-    <div className="flex flex-row w-full gap-4 pl-6">
+    <div className="flex flex-row w-full gap-4 pl-6 mt-6">
       <div className="px-4 py-3 min-h-72 w-full text-text flex flex-col bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-start justify-start rounded-base ring-offset-white transition-all gap-1.5">
         <Skeleton className="h-[20px] w-full"/>
         <Skeleton className="h-[18px] w-full"/>
