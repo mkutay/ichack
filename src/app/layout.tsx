@@ -10,7 +10,7 @@ const publicSans = Public_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Pathfinder.AI",
+  title: "Pathfinder AI",
   description: "Make decisions with Claude AI.",
 };
 
