@@ -1,5 +1,4 @@
-import { MainRoot, MainRootFallback } from "@/components/mainRoot";
-import { UnderNodes, UnderNodesFallback } from "@/components/underNodes";
+import { AsyncPage, AsyncPageFallback } from "@/components/asyncPage";
 import { Suspense, use } from "react";
 
 type Params = Promise<{ id: string }>;
@@ -13,17 +12,10 @@ export default function Page(props: {
   const id = params.id;
 
   return (
-    <div className="w-full space-y-8 my-6 pr-6">
-      <Suspense fallback={<MainRootFallback/>}>
-        <MainRoot id={id}/>
-      </Suspense>
-      <Suspense fallback={<UnderNodesFallback/>}>
-        <UnderNodes id={id}/>
-      </Suspense>
-      {/* <MainRootFallback/> */}
-      {/* <UnderNodesFallback/> */}
-    </div>
-  )
+    <Suspense fallback={<AsyncPageFallback/>}>
+      <AsyncPage id={id}/>
+    </Suspense>
+  );
 }
 
 // DND: DILEMMAS AND DECISIONS (w/ Pathfinder)
