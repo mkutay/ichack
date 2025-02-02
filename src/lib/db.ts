@@ -246,3 +246,14 @@ UPDATE scenarios
 SET question_ids=ARRAY['f2e65c6d-4c94-443c-983d-71254bcb5726'::UUID, '180cd872-9703-4106-94a2-5aa44e8afa88'::UUID, '63826199-c522-46b1-ba8a-de1cce519213'::UUID]
 WHERE id='5c4aa34f-2880-4c3c-8f2c-143000f1c26e';
 */
+
+export async function CreateExample(text: string) {
+  const id = crypto.randomUUID();
+  await insertFirstScenario({
+    title: '',
+    description: text,
+    questions: null,
+    answers: null
+  } as AIResponse, id);
+  redirect(`/${id}`);
+}

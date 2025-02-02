@@ -1,5 +1,8 @@
+'use client';
+
 import { FirstSubmitForm } from "@/components/firstSubmitForm";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { CreateExample } from "@/lib/db";
 
 export default function Page() {
   return (
@@ -12,15 +15,15 @@ export default function Page() {
         <div className="mt-6">
           First time? Here are some things you could ask me.
         </div>
-        <Link href={`/`} className="px-4 py-3 my-4 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
+        <Button onClick={async () => await CreateExample("I'm thinking about studying computer science at university.")} className="px-4 py-3 my-4 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
+          <div className="text-lg font-base text-left w-full leading-6 tracking-normal">I'm thinking about studying computer science at university.</div>
+        </Button>
+        <Button onClick={async () => await CreateExample('a')} className="px-4 py-3 my-4 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
           <div className="text-lg font-base text-left w-full leading-6 tracking-normal">Description</div>
-        </Link>
-        <Link href={`/`} className="px-4 py-3 my-4 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
+        </Button>
+        <Button onClick={async () => await CreateExample('a')} className="px-4 py-3 my-4 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
           <div className="text-lg font-base text-left w-full leading-6 tracking-normal">Description</div>
-        </Link>
-        <Link href={`/`} className="px-4 py-3 my-4 w-full flex flex-col text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-start rounded-base ring-offset-white transition-all gap-3">
-          <div className="text-lg font-base text-left w-full leading-6 tracking-normal">Description</div>
-        </Link>  
+        </Button>  
       </div>
     </div>
   );
