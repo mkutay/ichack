@@ -44,10 +44,11 @@ export function InfoComp({ questions, id }: {
   }[],
   id: string,
 }) {
+  const userAnswers = questions.map((question) => question.user_answer ?? "");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      userAnswers: questions.map((question) => question.user_answer ?? ""),
+      userAnswers,
     },
   });
 
@@ -94,7 +95,7 @@ export function InfoComp({ questions, id }: {
           )}
         />
         <div className="flex flex-row justify-end">
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={!userAnswers.includes('')} variant={!userAnswers.includes('') ? "noShadow" : "default"}>Submit</Button>
         </div>
       </form>
     </Form>

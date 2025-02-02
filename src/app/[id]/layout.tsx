@@ -39,8 +39,8 @@ export default async function Layout({
           </Suspense>
         </div>
         <div className="flex flex-row justify-end">
-          <div>
-            Make Decisions With Claude
+          <div className="text-lg font-semibold">
+            DnD: Dilemmas And Decisions
           </div>
         </div>
       </div>
