@@ -50,6 +50,7 @@ Only output the questions in JSON format as follows:
 }
 
 Rules to Follow:
+Do not ask the questions you have already asked.
 Ensure that questions are not lengthy. Keep them concise and to the point.
 Ensure questions focus on what matters most to the user based on prior context.
 Avoid asking questions that have already been addressed in the input history.
@@ -105,6 +106,7 @@ Only output the scenarios in JSON format as follows:
 }
 
 Rules to Follow:
+Do not suggest the scenarios you have already provided.
 Ensure each scenario is not lengthy. Keep them concise and to the point.
 Ensure each scenario is realistic yet distinct to present meaningful choices.
 Build on previously asked questions and answers to refine scenarios.
