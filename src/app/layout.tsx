@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${publicSans.variable} antialiased flex flex-col min-h-screen`}
+        className={`${publicSans.variable} antialiased flex flex-col min-h-screen bg-bg text-text`}
       >
         {/* <NavBar/> */}
         {children}
