@@ -30,9 +30,9 @@ export function FirstSubmitForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     const id = crypto.randomUUID();
-    insertFirstScenario({description: values.scenarioText, title: ''}, id);
+    await insertFirstScenario({description: values.scenarioText, title: ''}, id);
     redirect(`/${id}`);
   };
 

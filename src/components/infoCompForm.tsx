@@ -29,6 +29,7 @@ import {
 import { Textarea } from "./ui/textarea";
 import { insertQuestionAnswerWithQuestionId, updateScenario } from '@/lib/db';
 import { Skeleton } from './ui/skeleton';
+import { redirect } from 'next/navigation';
 
 const formSchema = z.object({
   userAnswers: z.array(z.string().min(1, {
@@ -58,6 +59,7 @@ export function InfoCompForm({ questions, id }: {
       await insertQuestionAnswerWithQuestionId(question.id, values.userAnswers[questions.indexOf(question)]);
     }
     await updateScenario(id);
+    redirect(`/${id}`);
   };
 
   return (
@@ -69,7 +71,7 @@ export function InfoCompForm({ questions, id }: {
           render={({ field }) => (
             <div className="flex flex-col gap-3">
               {questions.map((question, index) => (
-                <Card key={question.id}>
+                <Card key={question.id} className="h-64 justify-between flex flex-col pb-2">
                   <CardHeader className="p-3 px-4">
                     <CardTitle>
                       {question.title}
@@ -106,7 +108,7 @@ export function InfoCompForm({ questions, id }: {
 export function InfoCompFallback() {
   return (
     <div className="space-y-3">
-      <Card>
+      <Card className="h-60 justify-between flex flex-col pb-2">
         <CardHeader className="p-3 px-4">
           <Skeleton className="h-[20px] w-full"/>
           <Skeleton className="h-[14px] w-full"/> 
@@ -115,7 +117,25 @@ export function InfoCompFallback() {
           <Skeleton className="min-h-[80px] w-full"/>
         </CardContent>
       </Card>
-      <Card>
+      <Card className="h-60 justify-between flex flex-col pb-2">
+        <CardHeader className="p-3 px-4">
+          <Skeleton className="h-[20px] w-full"/>
+          <Skeleton className="h-[14px] w-full"/> 
+        </CardHeader>
+        <CardContent className="p-3 px-4 pt-0">
+          <Skeleton className="min-h-[80px] w-full"/>
+        </CardContent>
+      </Card>
+      <Card className="h-60 justify-between flex flex-col pb-2">
+        <CardHeader className="p-3 px-4">
+          <Skeleton className="h-[20px] w-full"/>
+          <Skeleton className="h-[14px] w-full"/> 
+        </CardHeader>
+        <CardContent className="p-3 px-4 pt-0">
+          <Skeleton className="min-h-[80px] w-full"/>
+        </CardContent>
+      </Card>
+      <Card className="h-60 justify-between flex flex-col pb-2">
         <CardHeader className="p-3 px-4">
           <Skeleton className="h-[20px] w-full"/>
           <Skeleton className="h-[14px] w-full"/> 

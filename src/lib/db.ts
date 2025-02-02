@@ -49,7 +49,8 @@ export async function getQuestionsAndInsert(scenarioId: string) {
     SET question_ids=${questionIds}
     WHERE id=${scenarioId}
   `;
-  revalidatePath(`/[id]`);
+  // redirect(`/${scenarioId}`);
+  revalidatePath('/[id]');
 }
 
 export async function getScenario(id: string): Promise<{
