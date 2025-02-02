@@ -2,6 +2,25 @@
 
 import { sql } from '@/lib/postgres';
 import { redirect } from 'next/navigation';
+import { getQuestions, getScenarios } from './claude';
+
+/*
+-- Create scenarios table
+CREATE TABLE scenarios (
+  id UUID PRIMARY KEY,
+  text TEXT,
+  question_ids UUID[],
+  scenario_ids UUID[],
+  parent_scenario_id UUID
+);
+
+-- Create questions table
+CREATE TABLE questions (
+  id UUID PRIMARY KEY,
+  question_text TEXT,
+  user_answer TEXT
+);
+*/
 
 export async function getDecisionFromId(id: string | null) {
   if (id === null) {
@@ -17,17 +36,16 @@ export async function getDecisionFromId(id: string | null) {
 
 export async function insertFirstScenario(scenarioText: string) {
   const id = crypto.randomUUID();
+  const questionTexts: string[] = await getQuestions([{name: scenarioText, questions: null, answer: null}]);
+  console.log(questionTexts);
+
+  const questionIds = await insertQuestions(id, questionTexts);
+
   try {
     await sql`
       INSERT INTO scenarios (id, text, question_ids, scenario_ids, parent_scenario_id)
       VALUES 
-      (
-        ${id},
-        ${scenarioText},
-        NULL,
-        NULL,
-        NULL
-      );
+      (${id}, ${scenarioText}, ${questionIds}, NULL, NULL);
     `;
   } catch (e) {
     console.error("trying to insert first scenario with text " + scenarioText + ". error: " + e);
@@ -40,6 +58,7 @@ export async function getScenario(id: string): Promise<{
   id: string,
   text: string | null,
   question_ids: string[] | null,
+  scenario_ids: string[] | null,
   parent_scenario_id: string | null,
 }[]> {
   return sql`
@@ -52,11 +71,13 @@ export async function getScenario(id: string): Promise<{
 export async function insertQuestions(scenarioId: string, questions: string[]) {
   const questionIds = questions.map(() => crypto.randomUUID());
   try {
-    await sql`
-      INSERT INTO questions (id, question_text, user_answer)
-      VALUES 
-      ${questions.map((question, i) => sql`(${questionIds[i]}, ${question}, NULL)`)}
-    `;
+    for (let i = 0; i < questions.length; i++) {
+      await sql`
+        INSERT INTO questions (id, question_text, user_answer)
+        VALUES
+        (${questionIds[i]}, ${questions[i]}, NULL);
+      `;
+    }
     await sql`
       UPDATE scenarios
       SET question_ids=${questionIds}
@@ -65,6 +86,7 @@ export async function insertQuestions(scenarioId: string, questions: string[]) {
   } catch (e) {
     console.error("trying to insert questions with text " + questions + ". error: " + e);
   }
+  return questionIds;
 }
 
 export async function getQuestionFromId(id: string): Promise<{
@@ -89,6 +111,10 @@ export async function insertQuestionAnswerWithQuestionId(questionId: string, ans
   } catch (e) {
     console.error("trying to insert question answer with questionId " + questionId + ". error: " + e);
   }
+}
+
+export async function updateScenario(id: string) {
+  // const scenarios = await getScenarios();
 }
 
 /*

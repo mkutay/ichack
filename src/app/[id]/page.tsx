@@ -1,7 +1,10 @@
+import { NodeDiv } from "@/components/nodeDiv";
 import { QuestionFlexForms } from "@/components/questionFlexForms";
 import { ScenarioFallback } from "@/components/scenarioFallback";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { getScenario } from "@/lib/db";
+import Link from "next/link";
 import { Suspense } from "react";
 
 export default async function Page({
@@ -13,26 +16,45 @@ export default async function Page({
 }) {
   const { id } = await params;
   const scenario = await getScenario(id);
-  console.log(scenario);
 
   if (scenario.length === 0) {
     return <div>Scenario not found</div>;
   }
 
+  console.log(scenario[0]);
+
   if (scenario[0].text === null) {
     return <ScenarioFallback/>;
   }
 
+  let childScenarios: {
+    id: string;
+    text: string | null;
+    question_ids: string[] | null;
+    scenario_ids: string[] | null;
+    parent_scenario_id: string | null;
+  }[];
+
+  if (scenario[0].scenario_ids === null) {
+    childScenarios = [];
+  } else {
+    childScenarios = await Promise.all(scenario[0].scenario_ids.map((scenarioId) => getScenario(scenarioId).then((s) => s[0])));
+  }
+
   return (
-    <div className="md:max-w-6xl max-w-prose w-full mx-auto my-4 space-y-8 px-4">
+    <div className="w-full my-6 space-y-8 px-4">
       <div className="max-w-xl mx-auto">
-        <div className="rounded-base h-[125px] w-full border-2 border-border p-4 shadow-shadow items-center flex justify-center">
-          <Label className="text-xl">{scenario[0].text}</Label>
-        </div>
+        <NodeDiv text={scenario[0].text}/>
       </div>
-      <Suspense>
-        <QuestionFlexForms questionIds={scenario[0].question_ids}/>
-      </Suspense>
+      <div className="flex flex-row w-full gap-4">
+        {childScenarios.map((childScenario) => (
+          <Button key={childScenario.id} asChild>
+            <Link href={`/${childScenario.id}`}>
+              <Label>{childScenario.text}</Label>
+            </Link>
+          </Button>
+        ))}
+      </div>
     </div>
   )
 }
