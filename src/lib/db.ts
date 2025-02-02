@@ -52,7 +52,7 @@ export async function getQuestionsAndInsert(scenarioId: string) {
     SET question_ids=${questionIds}
     WHERE id=${scenarioId}
   `;
-  revalidatePath(`/${scenarioId}`);
+  revalidatePath(`/[id]`);
 }
 
 export async function getScenario(id: string): Promise<{

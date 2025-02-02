@@ -1,11 +1,6 @@
-import { NodeDiv } from "@/components/nodeDiv";
-import { QuestionFlexForms } from "@/components/questionFlexForms";
 import { ScenarioFallback } from "@/components/scenarioFallback";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { getScenario } from "@/lib/db";
 import Link from "next/link";
-import { Suspense } from "react";
 
 export default async function Page({
   params,
@@ -45,16 +40,18 @@ export default async function Page({
 
   return (
     <div className="w-full my-6 space-y-8 px-4">
-      <div className="max-w-xl mx-auto">
-        <NodeDiv text={scenario[0].title + '\n' + scenario[0].description}/>
+      <div className="w-full flex flex-row">
+        <div className="mx-auto px-4 py-2 h-full w-1/3 text-text bg-bw border-2 border-border shadow-shadow flex items-center justify-center rounded-base ring-offset-white gap-2">
+          {scenario[0].title !== '' && <div className="text-xl font-bold">{scenario[0].title}</div>}
+          <div className="text-lg font-base">{scenario[0].description}</div>
+        </div>
       </div>
       <div className="flex flex-row w-full gap-4">
         {childScenarios.map((childScenario) => (
-          <Button key={childScenario.id} asChild className="h-fit w-full text-wrap">
-            <Link href={`/${childScenario.id}`}>
-              <Label>{childScenario.title + '\n' + childScenario.description}</Label>
-            </Link>
-          </Button>
+          <Link href={`/${childScenario.id}`} key={childScenario.id} className="px-4 py-2 h-full w-full text-text bg-bw border-2 border-border shadow-shadow hover:translate-x-boxShadowX hover:translate-y-boxShadowY hover:shadow-none items-center justify-center rounded-base ring-offset-white transition-all gap-2">
+            {childScenario.title !== '' && <div className="text-xl font-bold">{childScenario.title}</div>}
+            <div className="text-lg font-base">{childScenario.description}</div>
+          </Link>
         ))}
       </div>
     </div>
