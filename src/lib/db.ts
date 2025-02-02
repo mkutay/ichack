@@ -5,6 +5,17 @@ import { redirect } from 'next/navigation';
 import { AIResponse, getQuestionsClaude, getScenariosClaude, Scenario } from './claude';
 import { revalidatePath } from 'next/cache';
 
+export type ScenarioAlsoId = {
+  title: string,
+  description: string,
+  questions: {
+    title: string,
+    description: string,
+  }[] | null,
+  answers: string[] | null,
+  id: string,
+};
+
 /*
 -- Create scenarios table
 CREATE TABLE scenarios (
@@ -179,6 +190,55 @@ export async function getRecursiveHistory(id: string): Promise<Scenario[]> {
   return history.concat([{
     title: scenario[0].title, description: scenario[0].description, questions, answers
   } as Scenario]);
+}
+
+export async function getRecursiveHistoryAlsoId(id: string): Promise<ScenarioAlsoId[]> {
+  const scenario = await getScenario(id);
+  console.log("scenario: ", scenario);
+  if (scenario.length === 0) {
+    return [];
+  }
+  if (scenario[0].parent_scenario_id === null) {
+    if (scenario[0].question_ids === null) {
+      return [{
+        title: scenario[0].title, description: scenario[0].description, questions: null, answers: null, id
+      } as ScenarioAlsoId];
+    }
+    let questions: {
+      title: string,
+      description: string,
+    }[] = [];
+    let answers: string[] = [];
+    for (let i = 0; i < scenario[0].question_ids.length; i++) {
+      const q = await getQuestionFromId(scenario[0].question_ids[i]);
+      questions.push({title: q[0].title ?? '', description: q[0].description ?? ''});
+      answers.push(q[0].user_answer ?? '');
+    }
+    return [{
+      title: scenario[0].title, description: scenario[0].description, questions, answers, id
+    } as ScenarioAlsoId];
+  }
+  const history = await getRecursiveHistoryAlsoId(scenario[0].parent_scenario_id);
+
+  if (scenario[0].question_ids === null) {
+    return [{
+      title: scenario[0].title, description: scenario[0].description, questions: null, answers: null, id
+    } as ScenarioAlsoId];
+  }
+  let questions: {
+    title: string,
+    description: string,
+  }[] = [];
+  let answers: string[] = [];
+  for (let i = 0; i < scenario[0].question_ids.length; i++) {
+    const q = await getQuestionFromId(scenario[0].question_ids[i]);
+    questions.push({title: q[0].title ?? '', description: q[0].description ?? ''});
+    answers.push(q[0].user_answer ?? '');
+  }
+
+  return history.concat([{
+    title: scenario[0].title, description: scenario[0].description, questions, answers, id
+  } as ScenarioAlsoId]);
 }
 
 /*

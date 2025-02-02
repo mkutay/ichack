@@ -5,7 +5,7 @@ import { InfoCompForm } from './infoCompForm';
 export async function InfoComp({ id }: {
   id: string,
 }) {
-  const scenario = await getScenario(id);
+  let scenario = await getScenario(id);
 
   if (scenario.length === 0) {
     return <div>Scenario not found ba</div>;
@@ -13,8 +13,10 @@ export async function InfoComp({ id }: {
 
   if (scenario[0].question_ids === null) {
     await getQuestionsAndInsert(id);
-    return;
+    scenario = await getScenario(id);
   }
+
+  if (scenario[0].question_ids === null) return;
 
   const questions = await Promise.all(scenario[0].question_ids.map((questionId) => getQuestionFromId(questionId).then((q) => q[0])));
   return (
