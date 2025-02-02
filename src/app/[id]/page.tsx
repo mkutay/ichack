@@ -19,7 +19,7 @@ export default function Page(props: {
   const isNotFirst = searchParams.isNotFirst;
 
   return (
-    <div className="flex flex-row h-full">
+    <div className="flex flex-row min-h-screen">
       <div className="w-full my-6 pr-6 flex flex-col justify-between">
         <div className="w-full">
           <Suspense fallback={<MainRootFallback/>}>

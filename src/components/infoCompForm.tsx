@@ -86,7 +86,7 @@ export function InfoCompForm({ questions, id }: {
                   <CardContent className="p-3 px-4 pt-0">
                     <FormItem>
                       <FormControl>
-                          <Textarea {...field} value={field.value[index]} onChange={(e) => {
+                          <Textarea {...field} disabled={isSubmitted} value={field.value[index]} onChange={(e) => {
                             const newValue = [...field.value];
                             newValue[index] = e.target.value;
                             field.onChange(newValue);
