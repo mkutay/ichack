@@ -3,6 +3,7 @@
 import { sql } from '@/lib/postgres';
 import { redirect } from 'next/navigation';
 import { AIResponse, getQuestionsClaude, getScenariosClaude, Scenario } from './claude';
+import { revalidatePath } from 'next/cache';
 
 /*
 -- Create scenarios table
@@ -41,6 +42,17 @@ export async function insertFirstScenario(response: AIResponse) {
   }
 
   redirect(`/${id}`);
+}
+
+export async function getQuestionsAndInsert(scenarioId: string) {
+  const questionTexts: AIResponse[] = await getQuestionsClaude(await getRecursiveHistory(scenarioId));
+  const questionIds = await insertQuestions(scenarioId, questionTexts);
+  await sql`
+    UPDATE scenarios
+    SET question_ids=${questionIds}
+    WHERE id=${scenarioId}
+  `;
+  revalidatePath(`/${scenarioId}`);
 }
 
 export async function getScenario(id: string): Promise<{

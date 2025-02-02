@@ -1,6 +1,6 @@
 import { InfoComp } from "@/components/infoComp";
-import { getQuestionFromId, getScenario } from "@/lib/db";
-import { Suspense, use } from 'react'
+import { getQuestionFromId, getQuestionsAndInsert, getScenario } from "@/lib/db";
+import { Suspense } from 'react'
 
 type Params = Promise<{ id: string }>
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>
@@ -20,7 +20,8 @@ export default async function Layout({
   }
 
   if (scenario[0].question_ids === null) {
-    return <div>Scenario has no questions</div>;
+    await getQuestionsAndInsert(id);
+    return;
   }
 
   const questions = await Promise.all(scenario[0].question_ids.map((questionId) => getQuestionFromId(questionId).then((q) => q[0])));
