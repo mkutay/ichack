@@ -1,3 +1,7 @@
+This app allows you to visualise the outcomes of your actions using Claude AI. It creates a _decision_ tree around the thing that you want to look into.
+
+See [the post](https://www.mkutay.dev/posts/ichack-pathfinder-ai) for more info.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -37,8 +41,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## API documentation
 
-```js
-// type Scenario = {"name": String, "questions": [String], "answers": [String]}
+```ts
+type Scenario = {"name": String, "questions": [String], "answers": [String]}
 
 function getQuestions(history) { // [Scenario]
     return // [String]
